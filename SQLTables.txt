@@ -1,0 +1,62 @@
+create database IT
+
+use IT
+
+create table Clients
+(
+Client_ID numeric(4) primary key,
+Cname varchar(40) not null,
+Address varchar(30),
+Email varchar(30) unique,
+Phone numeric(10),
+Business varchar(20) not null
+)
+
+
+create table Employees
+(
+Empno numeric(4) primary key,
+Ename varchar(20) not null,
+Job varchar(15),
+Salary numeric(7) check(Salary > 0),
+Deptno numeric(2)
+)
+
+alter table Employees add constraint depfk foreign key(Deptno) references Departments(Deptno)
+
+create table Departments
+(
+Deptno numeric(2) primary key,
+Dname varchar(15) not null,
+Loc varchar(20)
+)
+
+
+create table Projects
+(
+Project_ID numeric(3) primary key,
+Descr varchar(30) not null,
+Start_Date Date,
+Planned_End_Date Date,
+Actual_End_date Date,
+Budget numeric(10) check(Budget > 0),
+Client_ID numeric(4) 
+)
+
+alter table Projects add constraint projchk check(Actual_End_date>Planned_End_Date)
+alter table Projects add constraint projfk foreign key(Client_ID) references Clients(Client_ID)
+
+create table EmpProjectTasks
+(
+Project_ID numeric(3) primary key,
+Empno numeric(4),
+Start_Date Date,
+End_Date Date,
+Task varchar(25) not null,
+Status varchar(15) not null
+)
+
+alter table EmpProjectTasks add constraint empprojtaskfk foreign key(Project_ID) references Projects(Project_ID)
+alter table EmpProjectTasks add constraint empprojtasfk foreign key(Empno) references Employees(Empno)
+
+
